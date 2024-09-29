@@ -2,6 +2,8 @@ use dotenvy::dotenv;
 use sqlx::{postgres::PgPoolOptions, Error, PgPool};
 use std::{env, time::Duration};
 
+pub mod user;
+
 #[derive(Clone)]
 pub struct DbState {
     pub pool: PgPool,
