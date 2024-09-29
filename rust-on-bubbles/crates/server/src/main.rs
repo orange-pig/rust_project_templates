@@ -1,14 +1,18 @@
-use axum::{response::Html, routing::get, Router};
+use axum::{routing::get, Router};
+use handlers::user::get_user;
 use tokio::net::TcpListener;
+
+mod handlers;
+mod models;
 
 #[tokio::main]
 async fn main() {
-    // ## 4. build application
-    let app = Router::new()
-        .route("/", get(Html("<h1>Hello World!</h1>")))
-        .route("/hello", get(|| async { "Hello Rust on Bubble!" }));
+    let user_router = Router::new().route("/", get(get_user));
 
-    // ## 5. run app with hyper, listening globally on port 3000
+    // ## build application
+    let app = Router::new().nest("/user", user_router);
+
+    // ## run app with hyper, listening globally on port 3000
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
