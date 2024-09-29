@@ -1,5 +1,6 @@
+use dotenvy::dotenv;
 use sqlx::{postgres::PgPoolOptions, Error, PgPool};
-use std::time::Duration;
+use std::{env, time::Duration};
 
 #[derive(Clone)]
 pub struct DbState {
@@ -7,9 +8,12 @@ pub struct DbState {
 }
 
 pub async fn hello_db() -> Result<PgPool, Error> {
+    dotenv().expect(".env not found!");
+    let db_connection_str: String = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
     PgPoolOptions::new()
         .max_connections(5)
         .acquire_timeout(Duration::from_secs(3))
-        .connect("postgres://your_db_username:your_db_password@localhost/your_db_name")
+        .connect(&db_connection_str)
         .await
 }
