@@ -1,4 +1,5 @@
 use axum::{routing::get, Router};
+use db::hello_db;
 use handlers::user::get_user;
 use tokio::net::TcpListener;
 
@@ -7,6 +8,10 @@ mod models;
 
 #[tokio::main]
 async fn main() {
+    
+    // ## init DB pool
+    let _pool = hello_db().await.expect("Can't connect to database");
+
     let user_router = Router::new().route("/", get(get_user));
 
     // ## build application

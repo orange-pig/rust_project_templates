@@ -1,14 +1,15 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use sqlx::{postgres::PgPoolOptions, Error, PgPool};
+use std::time::Duration;
+
+#[derive(Clone)]
+pub struct DbState {
+    pub pool: PgPool,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub async fn hello_db() -> Result<PgPool, Error> {
+    PgPoolOptions::new()
+        .max_connections(5)
+        .acquire_timeout(Duration::from_secs(3))
+        .connect("postgres://your_db_username:your_db_password@localhost/your_db_name")
+        .await
 }
