@@ -1,6 +1,6 @@
 use app_state::AppState;
 use axum::{routing::get, Router};
-use db::{hello_db, DbState};
+use db::{connc_db, DbState};
 use handlers::user::get_user;
 use tokio::net::TcpListener;
 
@@ -11,7 +11,7 @@ mod models;
 #[tokio::main]
 async fn main() {
     // ## init DB pool
-    let pool = hello_db().await.expect("Can't connect to database");
+    let pool = connc_db().await.expect("Can't connect to database");
 
     // ## init app state
     let state: AppState = AppState {

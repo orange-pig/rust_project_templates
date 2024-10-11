@@ -9,7 +9,7 @@ pub struct DbState {
     pub pool: PgPool,
 }
 
-pub async fn hello_db() -> Result<PgPool, Error> {
+pub async fn connc_db() -> Result<PgPool, Error> {
     dotenv().expect(".env not found!");
     let db_connection_str: String = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 
